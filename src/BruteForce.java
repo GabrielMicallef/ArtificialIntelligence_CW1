@@ -48,43 +48,42 @@ public class BruteForce{
 
         List<List<Integer>> permutations = permute(cityIds);
 
-//        for(int i=0; i<permutations.size(); i++){
-//            System.out.println(permutations.get(i));
-//        }
-
         // A for loop to get the permutations from the list and calculate the distance traveled for each path
         for(int i = 0; i < permutations.size(); i++){
-            List<Integer> perm =  permutations.get(i);
+            List<Integer> path =  permutations.get(i);
             List<Double> distances =  new ArrayList<>();
             double dist = 0;
 
-            System.out.println("PATH: " + perm.get(0) + ", " + perm.get(1) + ", " + perm.get(2) + ", " + perm.get(3));
-            int city1_num = perm.get(0);
+            System.out.println("PATH: " + path.get(0) + ", " + path.get(1) + ", " + path.get(2) + ", " + path.get(3) + ", " + path.get(0));
+            int city1_num = path.get(0);
             int x1 = 0;
             int y1 = 0;
-            int city2_num = perm.get(1);
+            int city2_num = path.get(1);
             int x2 = 0;
             int y2 = 0;
 
-            // JUST LOOK UP HOW TO GET THE DISTANCE BETWEEN CITIES FOR TSP
-            for (int j = 0; j < cities.size(); j++) {
-                System.out.println(cities.get(j).cityID + ", " + cities.get(j).x + ", " + cities.get(j).y);
+            int c1_i_limit = path.size();
+            int c2_i_limit = path.size() + 1;
 
-                for(int k = 0; k < perm.size() - 1; k++){
-                    if (city1_num != cities.get(j).cityID && city1_num != cities.size() - 1){
-                        city1_num = perm.get(j);
-                    }else if (city1_num == cities.get(j).cityID) {
-                        x1 = cities.get(j).x;
-                        y1 = cities.get(j).y;
-                    }
-
-                    if (city2_num != cities.get(j).cityID && city2_num != cities.size()){
-                        city2_num = perm.get(j) + 1;
-                    }else if (city2_num == cities.get(j).cityID) {
-                        x2 = cities.get(j).x;
-                        y2 = cities.get(j).y;
-                    }
+            for(int c1_i = 0, c2_i = 1; c1_i < c1_i_limit; c1_i++, c2_i++)
+            {
+                city1_num = path.get(c1_i);
+                if(c2_i == 4){
+                    c2_i = 0;
                 }
+                city2_num = path.get(c2_i);
+
+                if (city1_num == cities.get(c1_i).cityID) {
+                    x1 = cities.get(c1_i).x;
+                    y1 = cities.get(c1_i).y;
+                }
+
+                if (city2_num == cities.get(c2_i).cityID) {
+                    x2 = cities.get(c2_i).x;
+                    y2 = cities.get(c2_i).y;
+                }
+
+                // THE DATASET CO-ORDINATES ARE EQUAL, THEREFORE CAUSING THERE TO BE 0 AS A DISTANCE AMOUNT
                 dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
                 distances.add(dist);
             }
@@ -95,33 +94,27 @@ public class BruteForce{
                 distTotal = distTotal + distances.get(j);
                 System.out.println(city1_num + ", " + city2_num + ", Distances: " + distances.get(j));
             }
-//            System.out.println(distTotal);
 
-            permutationsFinal.add(new Permutation(distTotal, perm));
-            //System.out.println( permutationsFinal.size());
+            permutationsFinal.add(new Permutation(distTotal, path));
 
         }
 
-        for(int i = 0; i < permutationsFinal.size(); i++){
-            double shortestPerm = permutationsFinal.get(i).dist;
+        for(int i = 0, j = 1; j < permutationsFinal.size(); j++)
+        {
+            double shortestPath = permutationsFinal.get(i).dist;
+            double comp = permutationsFinal.get(j).dist;
 
-            for(int j  = 0; j < permutationsFinal.size(); j++){
-                double comp = permutationsFinal.get(j).dist;
+            if(comp < shortestPath){
+                i = j;
+            }
 
-                if(comp < shortestPerm){
-                    i = j;
-//                    System.out.println( i + ", " + j);
-                    if(j == permutationsFinal.size()){
-
-                        System.out.println("The shortest path is: " + permutationsFinal.get(i).path + ", Dist:" +permutationsFinal.get(i).dist);
-                        break;
-                    }
-                }
+            if(j == permutationsFinal.size() - 1){
+                System.out.println("The shortest path is: " + permutationsFinal.get(i).path + ", Dist:" +permutationsFinal.get(i).dist);
+                break;
             }
         }
-
-
     }
+
 
     // ===================================== METHODS =====================================
     static List<List<Integer>> permute(ArrayList<Integer> cityIds)
