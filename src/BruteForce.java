@@ -48,6 +48,8 @@ public class BruteForce{
 
         List<List<Integer>> permutations = permute(cityIds);
 
+        double startTime = System.nanoTime();
+
         // A for loop to get the permutations from the list and calculate the distance traveled for each path
         for(int i = 0; i < permutations.size(); i++){
             List<Integer> path =  permutations.get(i);
@@ -63,7 +65,6 @@ public class BruteForce{
             int y2 = 0;
 
             int c1_i_limit = path.size();
-            int c2_i_limit = path.size() + 1;
 
             for(int c1_i = 0, c2_i = 1; c1_i < c1_i_limit; c1_i++, c2_i++)
             {
@@ -73,18 +74,17 @@ public class BruteForce{
                 }
                 city2_num = path.get(c2_i);
 
-                if (city1_num == cities.get(c1_i).cityID) {
-                    x1 = cities.get(c1_i).x;
-                    y1 = cities.get(c1_i).y;
-                }
 
-                if (city2_num == cities.get(c2_i).cityID) {
-                    x2 = cities.get(c2_i).x;
-                    y2 = cities.get(c2_i).y;
-                }
+                    x1 = cities.get(city1_num-1).x;
+                    y1 = cities.get(city1_num-1).y;
+
+                    x2 = cities.get(city2_num-1).x;
+                    y2 = cities.get(city2_num-1).y;
+
 
                 // THE DATASET CO-ORDINATES ARE EQUAL, THEREFORE CAUSING THERE TO BE 0 AS A DISTANCE AMOUNT
                 dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+                System.out.println(city1_num + ", x1=" + x1 + ", y1=" +  y1 + ", " + city2_num + ", x2= " + x2 + ", y2=" +  y2  + ",  Distances: " + dist);
                 distances.add(dist);
             }
 
@@ -92,7 +92,6 @@ public class BruteForce{
 
             for (int j = 0; j < distances.size(); j++) {
                 distTotal = distTotal + distances.get(j);
-                System.out.println(city1_num + ", " + city2_num + ", Distances: " + distances.get(j));
             }
 
             permutationsFinal.add(new Permutation(distTotal, path));
@@ -113,8 +112,11 @@ public class BruteForce{
                 break;
             }
         }
-    }
 
+        double endTime = System.nanoTime();
+
+        DurationOfAlgorithm(startTime, endTime);
+    }
 
     // ===================================== METHODS =====================================
     static List<List<Integer>> permute(ArrayList<Integer> cityIds)
@@ -149,6 +151,16 @@ public class BruteForce{
             permutation.remove(permutation.size() - 1);
             usedIds[i] = false;
         }
+    }
+
+    // Gets the time taken for the algorithm to run
+    static void DurationOfAlgorithm(double startTime, double endTime)
+    {
+        double result = 0;
+
+        result = (endTime - startTime) / 1000000;
+
+        System.out.println("Duration: " + result + " milliseconds");
     }
 }
 

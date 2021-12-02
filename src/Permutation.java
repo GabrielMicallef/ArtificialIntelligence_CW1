@@ -17,22 +17,4 @@ public class Permutation {
     public String toString() {
         return "Path: " + path + " , " + "Distance: " + dist ;
     }
-
 }
-
-//        for(int i = 0, j = 1; i < permutationsFinal.size(); i++, j++)
-//        {
-//        double shortestPerm = permutationsFinal.get(i).dist;
-//        double comp = permutationsFinal.get(j).dist;
-//
-//        if(comp < shortestPerm){
-//        i = j;
-//        }
-//
-//        if(j == permutationsFinal.size()){
-//
-//        System.out.println("The shortest path is: " + permutationsFinal.get(i).path + ", Dist:" +permutationsFinal.get(i).dist);
-//        break;
-//        }
-//        }
-//        }
