@@ -28,7 +28,7 @@ public class BruteForce{
 
             lines.add(line);
 
-            String[] strCityData = line.split(" ");
+            String[] strCityData = line.split("\\s+");
             int[] intCityData = new int[strCityData.length];
 
             for(int i = 0; i < intCityData.length; i++){
