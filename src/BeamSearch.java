@@ -58,17 +58,19 @@ public class BeamSearch {
 
     static void helper(){
 
-        ArrayList<Integer> cityIds = new ArrayList<>();
+        //ArrayList<Integer> bestPath = new ArrayList<>();
 
-        //
         for(int i = 0; i < cities.size(); i++){
             usedCities.clear();
             City firstCity = new City(cities.get(i).cityID, cities.get(i).x, cities.get(i).y);
             usedCities.add(firstCity.cityID);
-            cityIds.add(firstCity.cityID);
-            getBestPath(firstCity);
-        }
+            //cityIds.add(firstCity.cityID);
+            bestPath = getBestPath(firstCity);
 
+            for(int j = 0; j < bestPath.size(); j++){
+                System.out.println(bestPath.get(i));
+            }
+        }
     }
 
     static ArrayList<Integer> getBestPath(City firstCity){
@@ -95,8 +97,8 @@ public class BeamSearch {
         int y1 = City1.y;
 
         for(int i = 0; i < cities.size(); i++){
-            for(int j = 0; j < usedCities.size(); j++){
-                if(cities.get(i).cityID != usedCities.get(j)){
+            for(int j = 0; j < cities.size(); j++){
+                if(cities.get(i).cityID != usedCities.get(j)){ // The error is the usedCities arrayList not being as large j in the second loop. Most likely will need to create another method to compare distances and make sure that the next city is not used at the same time.
                     int city2_id = cities.get(i).cityID;
                     int x2 = cities.get(i).x;
                     int y2 = cities.get(i).y;
@@ -108,7 +110,7 @@ public class BeamSearch {
             for(int j = 0; j < distances.size(); j++){
                 for(int k = 0; k < distances.size(); k++){
                     if(distances.get(j).dist < distances.get(k).dist){
-                        Distance shortestDist = new Distance(distances.get(j).dist,
+                        Distance distToClosest = new Distance(distances.get(j).dist,
                                 distances.get(j).city1ID, distances.get(j).city2ID);
                         addClosestCity(distances.get(j).city2ID);
 
@@ -134,6 +136,4 @@ public class BeamSearch {
             bestPath.add(closestCity);
         }
     }
-
-
 }
