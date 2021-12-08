@@ -12,7 +12,7 @@ public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USIN
     public static ArrayList<Permutation> bestPaths = new ArrayList<>();
 
     public static void main(String[] args)throws IOException {
-        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile2.txt";
+        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile1.txt";
 
         // Get text from file, split it, and return a multi-dimensional Array List
         ArrayList<ArrayList<Integer>> cityData = GetCityData(file_path);
@@ -66,7 +66,7 @@ public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USIN
             if(bestPath_forId.size() == 0){
                 bestPath_forId.add(0, firstCity_ID);
             }
-            else if(bestPath_forId.size() == 12){
+            else if(bestPath_forId.size() == cities.size()){
                 bestPath_forId.add(firstCity_ID);
             }
             else{
@@ -109,7 +109,7 @@ public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USIN
                 if (distances.get(i).city2ID == usedCities.get(j)){
                     used = true;
                 }
-                else if (j == usedCities.size() || (j + 1) == usedCities.size()){
+                else if (j == usedCities.size() || (j + 1) == usedCities.size()){ // THIS IS NOT MATCHING WHEN IT SHOULD BECAUSE WE NEED TO CHECK A DIFFERENT WAY
                     if(i != city1_id && used != true){
                         tempCity.dist = distances.get(i).dist;
                         tempCity.city1ID = distances.get(i).city1ID;
