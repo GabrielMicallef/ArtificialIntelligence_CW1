@@ -33,9 +33,6 @@ public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USIN
         double startTime = System.nanoTime();
 
         computeDistances();
-        for(int i = 0; i < distances.size(); i++){
-            System.out.println(distances.get(i).city1ID + " - " + distances.get(i).city2ID + " Distance = " + distances.get(i).dist);
-        }
 
         for(int i = 0; i < cities.size(); i++){
             usedCities.clear();
