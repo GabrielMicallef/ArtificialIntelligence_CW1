@@ -5,6 +5,8 @@ public class Permutation {
     double dist;
     List<Integer> path = new ArrayList<Integer>();
 
+    public Permutation(){}
+
     public Permutation(double d, List<Integer> p){
         this.dist = d;
         this.path = p;

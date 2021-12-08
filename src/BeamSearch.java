@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BeamSearch {
+public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
 
     public static ArrayList<City> cities = new ArrayList<>();
     public static ArrayList<Distance> distances = new ArrayList<>();
     public static ArrayList<Integer> usedCities = new ArrayList<>();
-    public static ArrayList<Integer> bestPath = new ArrayList<>();
+    public static ArrayList<Permutation> bestPaths = new ArrayList<>();
 
     public static void main(String[] args)throws IOException {
         String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile2.txt";
@@ -25,8 +25,143 @@ public class BeamSearch {
         helper();
     }
 
-
     // ===================================== METHODS =====================================
+    static void helper(){
+        List<Integer> tempList = new ArrayList(cities.size() + 1);
+        Permutation bestPath = new Permutation(1000000000, tempList);
+
+        double startTime = System.nanoTime();
+
+        computeDistances();
+        for(int i = 0; i < distances.size(); i++){
+            System.out.println(distances.get(i).city1ID + " - " + distances.get(i).city2ID + " Distance = " + distances.get(i).dist);
+        }
+
+        for(int i = 0; i < cities.size(); i++){
+            usedCities.clear();
+            City firstCity = new City(cities.get(i).cityID, cities.get(i).x, cities.get(i).y);
+            usedCities.add(firstCity.cityID);
+            bestPaths.add(getBestPath(firstCity.cityID));
+        }
+
+        for(int i = 0; i < bestPaths.size(); i++){
+            System.out.println(bestPaths.get(i));
+            if (bestPaths.get(i).dist < bestPath.dist){
+                bestPath.path = bestPaths.get(i).path;
+                bestPath.dist = bestPaths.get(i).dist;
+            }
+        }
+
+        System.out.println("Shortest Path = " + bestPath.path + " Distance = " + bestPath.dist);
+
+        double endTime = System.nanoTime();
+
+        DurationOfAlgorithm(startTime, endTime);
+    }
+
+    static Permutation getBestPath(int firstCityId) {
+        int firstCity_ID = firstCityId;
+        double totalDistance = 0;
+        ArrayList<Integer> bestPath_forId = new ArrayList<>();
+        Permutation finalPermutation = new Permutation();
+
+        for(int i = 0; i < (cities.size() + 1); i++){
+            if(bestPath_forId.size() == 0){
+                bestPath_forId.add(0, firstCity_ID);
+            }
+            else if(bestPath_forId.size() == 12){
+                bestPath_forId.add(firstCity_ID);
+            }
+            else{
+                Distance closestCity = getClosestCity(firstCityId);
+                bestPath_forId.add(closestCity.city2ID);
+                totalDistance = totalDistance + closestCity.dist;
+                usedCities.add(closestCity.city2ID);
+                firstCityId = closestCity.city2ID;
+            }
+        }
+
+        for(int i = 0; i < distances.size(); i++){
+            if(distances.get(i).city1ID == bestPath_forId.get(0) && distances.get(i).city2ID == bestPath_forId.get(1) && bestPath_forId.size() == 0){
+                totalDistance = totalDistance + distances.get(i).dist;
+            }
+            else if(distances.get(i).city1ID == bestPath_forId.get(cities.size() - 1) && distances.get(i).city2ID == bestPath_forId.get(cities.size()) && bestPath_forId.size() == (cities.size() + 1)){
+                totalDistance = totalDistance + distances.get(i).dist;
+            }
+        }
+
+        finalPermutation.dist = totalDistance;
+        finalPermutation.path = bestPath_forId;
+
+        return finalPermutation;
+    }
+
+    static Distance getClosestCity(int city1_id){
+        Distance tempCity = new Distance(0, 0, 0);
+        Distance closestCity = new Distance(1000000, city1_id, city1_id);
+
+        int first_index = (city1_id * (cities.size() - 1)) - (cities.size() - 1);
+        int last_index  = (city1_id * (cities.size() - 1)) - 1;
+
+        boolean used = false;
+
+        for(int i = first_index; i <= last_index; i++){
+            used = false;
+
+            for(int j = 0; j < usedCities.size(); j++){
+                if (distances.get(i).city2ID == usedCities.get(j)){
+                    used = true;
+                }
+                else if (j == usedCities.size() || (j + 1) == usedCities.size()){
+                    if(i != city1_id && used != true){
+                        tempCity.dist = distances.get(i).dist;
+                        tempCity.city1ID = distances.get(i).city1ID;
+                        tempCity.city2ID = distances.get(i).city2ID;
+
+                        if(distances.get(i).dist < closestCity.dist){
+                            closestCity.city1ID = distances.get(i).city1ID;
+                            closestCity.city2ID = distances.get(i).city2ID;
+                            closestCity.dist = distances.get(i).dist;
+                        }
+                    }
+                    else if (distances.get(i).city2ID == usedCities.get(j)){
+                        break;
+                    }
+                }
+            }
+        }
+
+        return closestCity;
+    }
+
+    static void computeDistances(){
+
+        for(int i = 0; i < cities.size(); i++)
+        {
+            int city1_id = cities.get(i).cityID;
+            int x1 = cities.get(i).x;
+            int y1 = cities.get(i).y;
+
+            for(int j = 0; j < cities.size(); j++)
+            {
+                int city2_id = cities.get(j).cityID;
+                int x2 = cities.get(j).x;
+                int y2 = cities.get(j).y;
+
+                if(city1_id != city2_id){
+                    addDistance(city1_id, x1, y1, city2_id, x2, y2);
+                }
+            }
+        }
+    }
+
+    static void addDistance(int city1_id, int x1, int y1, int city2_id, int x2, int y2){
+        double dist = 0;
+
+        dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        distances.add(new Distance(dist, city1_id, city2_id));
+    }
+
     public static ArrayList<ArrayList<Integer>> GetCityData(String filePath) {
         String line;
         List lines = new ArrayList();
@@ -56,84 +191,13 @@ public class BeamSearch {
         return cities;
     }
 
-    static void helper(){
+    // Gets the time taken for the algorithm to run
+    static void DurationOfAlgorithm(double startTime, double endTime)
+    {
+        double result = 0;
 
-        //ArrayList<Integer> bestPath = new ArrayList<>();
+        result = (endTime - startTime) / 1000000;
 
-        for(int i = 0; i < cities.size(); i++){
-            usedCities.clear();
-            City firstCity = new City(cities.get(i).cityID, cities.get(i).x, cities.get(i).y);
-            usedCities.add(firstCity.cityID);
-            //cityIds.add(firstCity.cityID);
-            bestPath = getBestPath(firstCity);
-
-            for(int j = 0; j < bestPath.size(); j++){
-                System.out.println(bestPath.get(i));
-            }
-        }
-    }
-
-    static ArrayList<Integer> getBestPath(City firstCity){
-
-        ArrayList<Integer> bestPath = new ArrayList<>();
-
-        bestPath.add(firstCity.cityID);
-
-        // Add get the
-        for(int i = 0; i < (cities.size()); i++){
-            if(cities.get(i).cityID == bestPath.get(bestPath.size()-1)){
-                City City1 = cities.get(i);
-                int city2_ID = getClosestCity(City1);
-                bestPath.add(city2_ID);
-            }
-        }
-        return bestPath;
-    }
-
-    static Integer getClosestCity (City City1){
-        int result = 0;
-        int city1_id = City1.cityID;
-        int x1 = City1.x;
-        int y1 = City1.y;
-
-        for(int i = 0; i < cities.size(); i++){
-            for(int j = 0; j < cities.size(); j++){
-                if(cities.get(i).cityID != usedCities.get(j)){ // The error is the usedCities arrayList not being as large j in the second loop. Most likely will need to create another method to compare distances and make sure that the next city is not used at the same time.
-                    int city2_id = cities.get(i).cityID;
-                    int x2 = cities.get(i).x;
-                    int y2 = cities.get(i).y;
-
-                    addDistance(city1_id, x1, y1, city2_id, x2, y2);
-                }
-            }
-
-            for(int j = 0; j < distances.size(); j++){
-                for(int k = 0; k < distances.size(); k++){
-                    if(distances.get(j).dist < distances.get(k).dist){
-                        Distance distToClosest = new Distance(distances.get(j).dist,
-                                distances.get(j).city1ID, distances.get(j).city2ID);
-                        addClosestCity(distances.get(j).city2ID);
-
-                        result = distances.get(j).city2ID;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    static void addDistance(int city1_id, int x1, int y1, int city2_id, int x2, int y2){
-        double dist = 0;
-
-        dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        distances.add(new Distance(dist, city1_id, city2_id));
-    }
-
-    static void addClosestCity(int closestCity){
-        if(bestPath.size() <= (cities.size()+1))
-        {
-            bestPath.add(closestCity);
-        }
+        System.out.println("Duration: " + result + " milliseconds");
     }
 }
