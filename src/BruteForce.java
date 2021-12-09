@@ -37,10 +37,6 @@ public class BruteForce{
             cities.add(new City(intCityData[0],intCityData[1],intCityData[2]));
         }
 
-        for(int i = 0; i < cities.size(); i++){
-            System.out.println(cities.get(i));
-        }
-
         for(int i=0; i<cities.size(); i++){
             cityIds.add(cities.get(i).cityID);
         }

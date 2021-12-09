@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
+public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
 
     public static ArrayList<City> cities = new ArrayList<>();
     public static ArrayList<Distance> distances = new ArrayList<>();
@@ -12,14 +12,13 @@ public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT I
     public static ArrayList<Permutation> bestPaths = new ArrayList<>();
 
     public static void main(String[] args)throws IOException {
-        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile1.txt";
+        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile2.txt";
 
         // Get text from file, split it, and return a multi-dimensional Array List
         ArrayList<ArrayList<Integer>> cityData = GetCityData(file_path);
 
         for (int i=0; i< cityData.size(); i++){
             cities.add(new City(cityData.get(i).get(0),cityData.get(i).get(1),cityData.get(i).get(2)));
-            System.out.println(cities.get(i));
         }
 
         helper();
@@ -42,7 +41,6 @@ public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT I
         }
 
         for(int i = 0; i < bestPaths.size(); i++){
-            System.out.println(bestPaths.get(i));
             if (bestPaths.get(i).dist < bestPath.dist){
                 bestPath.path = bestPaths.get(i).path;
                 bestPath.dist = bestPaths.get(i).dist;
@@ -110,7 +108,7 @@ public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT I
                     used = true;
                 }
                 else if (j == usedCities.size() || (j + 1) == usedCities.size()){ // THIS IS NOT MATCHING WHEN IT SHOULD BECAUSE WE NEED TO CHECK A DIFFERENT WAY
-                    if(i != city1_id && used != true){
+                    if(used != true){
                         tempCity.dist = distances.get(i).dist;
                         tempCity.city1ID = distances.get(i).city1ID;
                         tempCity.city2ID = distances.get(i).city2ID;
@@ -121,7 +119,7 @@ public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT I
                             closestCity.dist = distances.get(i).dist;
                         }
                     }
-                    else if (distances.get(i).city2ID == usedCities.get(j)){
+                    else{
                         break;
                     }
                 }
