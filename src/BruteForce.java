@@ -12,7 +12,6 @@ import static java.util.Collections.swap;
 
 public class BruteForce{
     public static void main(String[] args) throws IOException {
-        // Comment innit
         String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile1.txt";
         File file = new File(file_path);
         String line;
@@ -56,7 +55,7 @@ public class BruteForce{
             List<Double> distances =  new ArrayList<>();
             double dist = 0;
 
-            System.out.println("PATH: " + path.get(0) + ", " + path.get(1) + ", " + path.get(2) + ", " + path.get(3) + ", " + path.get(0));
+            // ADD THE IF STATEMENT TO ADD THE FIRST CITY TO THE PERMUTATION AND CALCULATE THE DISTANCE FOR IT
             int city1_num = path.get(0);
             int x1 = 0;
             int y1 = 0;
@@ -69,26 +68,48 @@ public class BruteForce{
             for(int c1_i = 0, c2_i = 1; c1_i < c1_i_limit; c1_i++, c2_i++)
             {
                 city1_num = path.get(c1_i);
-                if(c2_i == 4){
+                if(c2_i == cities.size()){
                     c2_i = 0;
                 }
                 city2_num = path.get(c2_i);
 
 
-                    x1 = cities.get(city1_num-1).x;
-                    y1 = cities.get(city1_num-1).y;
+                x1 = cities.get(city1_num-1).x;
+                y1 = cities.get(city1_num-1).y;
 
-                    x2 = cities.get(city2_num-1).x;
-                    y2 = cities.get(city2_num-1).y;
+                x2 = cities.get(city2_num-1).x;
+                y2 = cities.get(city2_num-1).y;
 
 
                 // THE DATASET CO-ORDINATES ARE EQUAL, THEREFORE CAUSING THERE TO BE 0 AS A DISTANCE AMOUNT
                 dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-                System.out.println(city1_num + ", x1=" + x1 + ", y1=" +  y1 + ", " + city2_num + ", x2= " + x2 + ", y2=" +  y2  + ",  Distances: " + dist);
                 distances.add(dist);
             }
 
             double distTotal = 0;
+
+            if(path.size() == cities.size()){
+                int lastCityId = path.get(path.size()-1);
+
+                for(int j = 0; j < cities.size(); j++){
+                    if(lastCityId == cities.get(j).cityID){
+                        x1 = cities.get(j).x;
+                        y1 = cities.get(j).y;
+
+                        for(int k = 0; k < cities.size(); k++){
+                            if(path.get(0) == cities.get(k).cityID) {
+                                x2 = cities.get(k).x;
+                                y2 = cities.get(k).y;
+
+                                dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+                                distances.add(dist);
+                            }
+                        }
+                    }
+                }
+
+                path.add(path.get(0));
+            }
 
             for (int j = 0; j < distances.size(); j++) {
                 distTotal = distTotal + distances.get(j);

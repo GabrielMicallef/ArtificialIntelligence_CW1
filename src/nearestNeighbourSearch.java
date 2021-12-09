@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BeamSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
+public class nearestNeighbourSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
 
     public static ArrayList<City> cities = new ArrayList<>();
     public static ArrayList<Distance> distances = new ArrayList<>();
