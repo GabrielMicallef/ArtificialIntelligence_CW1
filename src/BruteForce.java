@@ -12,7 +12,7 @@ import static java.util.Collections.swap;
 
 public class BruteForce{
     public static void main(String[] args) throws IOException {
-        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile1.txt";
+        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\FinalTestFile2.txt";
         File file = new File(file_path);
         String line;
         List lines = new ArrayList();
@@ -45,13 +45,13 @@ public class BruteForce{
 
         double startTime = System.nanoTime();
 
-        // A for loop to get the permutations from the list and calculate the distance traveled for each path
+        // A for loop to get the permutations from the list and calculates the distance traveled for each path
         for(int i = 0; i < permutations.size(); i++){
             List<Integer> path =  permutations.get(i);
             List<Double> distances =  new ArrayList<>();
             double dist = 0;
 
-            // ADD THE IF STATEMENT TO ADD THE FIRST CITY TO THE PERMUTATION AND CALCULATE THE DISTANCE FOR IT
+
             int city1_num = path.get(0);
             int x1 = 0;
             int y1 = 0;
@@ -76,8 +76,6 @@ public class BruteForce{
                 x2 = cities.get(city2_num-1).x;
                 y2 = cities.get(city2_num-1).y;
 
-
-                // THE DATASET CO-ORDINATES ARE EQUAL, THEREFORE CAUSING THERE TO BE 0 AS A DISTANCE AMOUNT
                 dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
                 distances.add(dist);
             }
@@ -115,6 +113,7 @@ public class BruteForce{
 
         }
 
+        // A for loop to output the shortest path
         for(int i = 0, j = 1; j < permutationsFinal.size(); j++)
         {
             double shortestPath = permutationsFinal.get(i).dist;
@@ -136,6 +135,7 @@ public class BruteForce{
     }
 
     // ===================================== METHODS =====================================
+    // Returns a multi dimensional List which contains all the permutations
     static List<List<Integer>> permute(ArrayList<Integer> cityIds)
     {
         List<List<Integer>> result = new ArrayList<>();
@@ -152,6 +152,7 @@ public class BruteForce{
         return result;
     }
 
+    // Populates the Permutations with cities whilst checking if the cities have been used before.
     static void helper(ArrayList<Integer> cityIds, List<Integer> permutation, boolean[] usedIds, List<List<Integer>> result)
     {
         if(permutation.size() == cityIds.size()){

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL USING THE SAME CITY
+public class BestFirstSearch {
 
     public static ArrayList<City> cities = new ArrayList<>();
     public static ArrayList<Distance> distances = new ArrayList<>();
@@ -12,7 +12,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
     public static ArrayList<Permutation> bestPaths = new ArrayList<>();
 
     public static void main(String[] args)throws IOException {
-        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\testfile2.txt";
+        String file_path = "C:\\Users\\Gabriel\\IdeaProjects\\ArtificialIntelligence_CW1\\Test Files\\FinalTestFile4.txt";
 
         // Get text from file, split it, and return a multi-dimensional Array List
         ArrayList<ArrayList<Integer>> cityData = GetCityData(file_path);
@@ -25,6 +25,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
     }
 
     // ===================================== METHODS =====================================
+    // Initiates the other methods to get the shortest path
     static void helper(){
         List<Integer> tempList = new ArrayList(cities.size() + 1);
         Permutation bestPath = new Permutation(1000000000, tempList);
@@ -54,6 +55,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
         DurationOfAlgorithm(startTime, endTime);
     }
 
+    // Gets the best path depending on the first city
     static Permutation getBestPath(int firstCityId) {
         int firstCity_ID = firstCityId;
         double totalDistance = 0;
@@ -91,6 +93,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
         return finalPermutation;
     }
 
+    // Returns the closest city to the city passed to this method
     static Distance getClosestCity(int city1_id){
         Distance tempCity = new Distance(0, 0, 0);
         Distance closestCity = new Distance(1000000, city1_id, city1_id);
@@ -107,7 +110,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
                 if (distances.get(i).city2ID == usedCities.get(j)){
                     used = true;
                 }
-                else if (j == usedCities.size() || (j + 1) == usedCities.size()){ // THIS IS NOT MATCHING WHEN IT SHOULD BECAUSE WE NEED TO CHECK A DIFFERENT WAY
+                else if (j == usedCities.size() || (j + 1) == usedCities.size()){
                     if(used != true){
                         tempCity.dist = distances.get(i).dist;
                         tempCity.city1ID = distances.get(i).city1ID;
@@ -129,6 +132,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
         return closestCity;
     }
 
+    // Calculates the distances between two cities and
     static void computeDistances(){
 
         for(int i = 0; i < cities.size(); i++)
@@ -150,6 +154,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
         }
     }
 
+    // Adds the result of the distance, along with the cities involved to the Distances ArrayList
     static void addDistance(int city1_id, int x1, int y1, int city2_id, int x2, int y2){
         double dist = 0;
 
@@ -157,6 +162,7 @@ public class BestFirstSearch {// CHECK THE OTHER FILE TO CONFIRM WHY IT IS STILL
         distances.add(new Distance(dist, city1_id, city2_id));
     }
 
+    // Gets all the cities from the test file and instantiates and object of type City
     public static ArrayList<ArrayList<Integer>> GetCityData(String filePath) {
         String line;
         List lines = new ArrayList();
